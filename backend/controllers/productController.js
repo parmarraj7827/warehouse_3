@@ -47,7 +47,20 @@ function validateProductInput(body, { partial = false } = {}) {
   if (input.productCode !== undefined) input.productCode = String(input.productCode).trim().toUpperCase();
   if (input.category !== undefined) input.category = String(input.category).trim();
   if (input.supplier !== undefined) input.supplier = String(input.supplier || '').trim();
-  if (input.warehouseLocation !== undefined) input.warehouseLocation = String(input.warehouseLocation || '').trim();
+  if (input.warehouseLocation !== undefined) {
+  input.warehouseLocation =
+    String(input.warehouseLocation || '').trim();
+}
+
+if (input.status !== undefined) {
+  input.status = String(input.status).trim().toLowerCase();
+
+  if (!['active', 'inactive'].includes(input.status)) {
+    throw new Error(
+      'Invalid status. Allowed values are active and inactive.'
+    );
+  }
+}
   if (input.price !== undefined) {
     input.price = Number(input.price);
     if (!Number.isFinite(input.price) || input.price < 0) throw new Error('Price must be a number greater than or equal to 0.');

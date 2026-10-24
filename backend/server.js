@@ -83,7 +83,10 @@ const formatProduct = (product) => {
     description: product.description || '',
     createdAt: product.createdAt,
     // Add a status depending on how much stock is left
-    status: product.quantity <= product.minimumStock ? 'LOW STOCK' : 'IN STOCK'
+   status: product.status || 'active',
+stockStatus: product.quantity <= product.minimumStock
+  ? 'LOW STOCK'
+  : 'IN STOCK'
   };
 };
 
@@ -475,9 +478,19 @@ async function handleAction(operation, variables, req) {
       requireRole(user, 'admin'); 
       try { 
         // Validate numbers
-        const price = Number(data.input.price);
-        const qty = Number(data.input.quantity);
-        const minStock = Number(data.input.minimumStock);
+          const status = String(
+      data.input.status || 'active'
+    ).trim().toLowerCase();
+
+    if (!['active', 'inactive'].includes(status)) {
+      throw new Error(
+        'Invalid status. Allowed values are active and inactive.'
+      );
+    }
+
+const price = Number(data.input.price);
+const qty = Number(data.input.quantity);
+const minStock = Number(data.input.minimumStock);
         
         if (price < 0 || qty < 0 || minStock < 0) {
           throw new Error('Numeric values cannot be negative.'); 
@@ -486,6 +499,7 @@ async function handleAction(operation, variables, req) {
         // Create it
         const newProduct = await Product.create({ 
           ...data.input, 
+          status: status,
           price: price, 
           quantity: qty, 
           minimumStock: minStock, 
@@ -500,7 +514,16 @@ async function handleAction(operation, variables, req) {
     
     case 'UPDATE_PRODUCT': {
       requireRole(user, 'admin'); 
-      const inputData = data.input || {}; 
+      const inputData = data.input || {};
+      if (inputData.status !== undefined) {
+  inputData.status = String(inputData.status).trim().toLowerCase();
+
+  if (!['active', 'inactive'].includes(inputData.status)) {
+    throw new Error(
+      'Invalid status. Allowed values are active and inactive.'
+    );
+  }
+} 
       
       const price = Number(inputData.price);
       const minStock = Number(inputData.minimumStock);

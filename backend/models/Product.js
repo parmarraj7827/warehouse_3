@@ -57,6 +57,13 @@ const productSchema = new mongoose.Schema({
     required: true,
     default: 5      // By default, warn us if we have 5 or less left
   },
+  status: {
+  type: String,
+  enum: ['active', 'inactive'],
+  default: 'active',
+  lowercase: true,
+  trim: true
+},
 
   // Where this product is stored inside the warehouse
   warehouseLocation: {
