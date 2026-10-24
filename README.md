@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Warehouse Management System
 
 A simple React + Node.js + MongoDB warehouse management project.
@@ -88,3 +89,6 @@ Open the Vite URL shown in the terminal, normally `http://localhost:5173`.
 - Admin can approve/reject user requests.
 - Stock changes are saved in MongoDB.
 - No seed data is required.
+=======
+# warehouse_3
+>>>>>>> c36c798ed8c9a75356f0f98377a295d3924dd898
