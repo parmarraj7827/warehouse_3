@@ -11,6 +11,7 @@ const init = {
   supplier: "",
   minimumStock: "5",
   warehouseLocation: "",
+   status: "active",
 };
 export default function AddProduct() {
   const nav = useNavigate();
@@ -134,6 +135,23 @@ function Form({
             onChange={change}
             placeholder="Example: A-101"
           />
+          <div>
+          <label className="label" htmlFor="status">
+            Product Status *
+          </label>
+
+          <select
+            id="status"
+            name="status"
+            className="input"
+            value={f.status}
+            onChange={change}
+            required
+          >
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
           <Field
             label="Minimum Stock *"
             name="minimumStock"

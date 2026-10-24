@@ -20,6 +20,7 @@ export default function EditProduct() {
         supplier: p.supplier || "",
         minimumStock: String(p.minimumStock),
         warehouseLocation: p.warehouseLocation || "",
+         status: p.status || "active",
       });
     }
   }, [data]);
@@ -40,7 +41,8 @@ export default function EditProduct() {
         price: Number(f.price),
         supplier: f.supplier,
         minimumStock: Number(f.minimumStock),
-        warehouseLocation: f.warehouseLocation
+        warehouseLocation: f.warehouseLocation,
+         status: f.status
       });
       nav("/admin/products");
     } catch (e) {

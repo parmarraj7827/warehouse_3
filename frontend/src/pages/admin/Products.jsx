@@ -4,14 +4,31 @@ import { Search, Plus, Edit3, Trash2, Eye, Package, Tag, MapPin, Building2, Aler
 import { useState } from "react";
 import Modal from "../../components/Modal";
 
-const Badge = ({ status }) => (
-  status === "LOW STOCK" ? (
-    <span className="badge-amber"><AlertTriangle className="h-3 w-3" /> LOW STOCK</span>
+const StatusBadge = ({ status }) => (
+  status === "inactive" ? (
+    <span className="inline-flex items-center rounded-full bg-rose-100 px-2.5 py-1 text-xs font-bold text-rose-700">
+      INACTIVE
+    </span>
   ) : (
-    <span className="badge-emerald"><CheckCircle2 className="h-3 w-3" /> IN STOCK</span>
+    <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-bold text-emerald-700">
+      ACTIVE
+    </span>
   )
 );
 
+const StockBadge = ({ status }) => (
+  status === "LOW STOCK" ? (
+    <span className="badge-amber">
+      <AlertTriangle className="h-3 w-3" />
+      LOW STOCK
+    </span>
+  ) : (
+    <span className="badge-emerald">
+      <CheckCircle2 className="h-3 w-3" />
+      IN STOCK
+    </span>
+  )
+);
 export default function Products() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
@@ -74,14 +91,27 @@ export default function Products() {
           <table className="min-w-full text-left text-sm">
             <thead className="table-head">
               <tr>
-                {["#", "Product Name", "Category", "SKU Code", "Location", "Stock", "Price", "Status", "Actions"].map((h) => (
-                  <th key={h} className="px-4 py-3.5 font-bold">{h}</th>
-                ))}
+                {[
+                    "#",
+                    "Product Name",
+                    "Category",
+                    "SKU Code",
+                    "Location",
+                    "Stock",
+                    "Stock Level",
+                    "Price",
+                    "Status",
+                    "Actions"
+                  ].map((h) => (
+                    <th key={h} className="px-4 py-3.5 font-bold">
+                      {h}
+                    </th>
+                  ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {loading ? (
-                <tr><td colSpan="9" className="p-12 text-center text-xs text-slate-400">Loading catalog items...</td></tr>
+                <tr><td colSpan="10" className="p-12 text-center text-xs text-slate-400">Loading catalog items...</td></tr>
               ) : (
                 rows.map((p, i) => (
                   <tr key={p.id} className="table-row">
@@ -119,13 +149,21 @@ export default function Products() {
                       )}
                     </td>
 
-                    <td className="px-4 py-4 font-extrabold text-slate-900">{p.quantity}</td>
-                    
+                    <td className="px-4 py-4 font-extrabold text-slate-900">
+                      {p.quantity}
+                    </td>
+
+                    <td className="px-4 py-4">
+                      <StockBadge status={p.stockStatus} />
+                    </td>
+
                     <td className="px-4 py-4 font-bold text-slate-800">
                       ₹ {p.price?.toLocaleString("en-IN")}
                     </td>
 
-                    <td className="px-4 py-4"><Badge status={p.status} /></td>
+                    <td className="px-4 py-4">
+                      <StatusBadge status={p.status} />
+                    </td>
                     
                     {/* Actions */}
                     <td className="px-4 py-4">
@@ -159,7 +197,7 @@ export default function Products() {
                 ))
               )}
               {!loading && !rows.length && (
-                <tr><td colSpan="9" className="p-12 text-center text-xs text-slate-400">No products found matching your search.</td></tr>
+                <tr><td colSpan="10" className="p-12 text-center text-xs text-slate-400">No products found matching your search.</td></tr>
               )}
             </tbody>
           </table>
